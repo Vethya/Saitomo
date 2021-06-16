@@ -11,6 +11,6 @@ A management bot with awesome extra commands for Discord.
 - `python3 -m helper`
 ## Credits
 - [Blankie](https://github.com/the-blank-x) for the execute command.
-- Raitomo (RaiTomo) for bot name and huge grammer fix.
+- Raitomo (RaiTomo#6844) for bot name and huge grammer fix.
 ## Contributions
 Any contributions will be grateful. But, your code must be rated with the score of 6.0 or higher.
