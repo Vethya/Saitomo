@@ -44,7 +44,7 @@ class Information(commands.Cog):
         """Check if the bot is alive with some additional informations"""
         now = datetime.now()
         delta = now - runtime
-        time = str(timedelta(seconds=delta.seconds)).split    (":")
+        time = str(timedelta(seconds=delta.seconds)).split(":")
         days = "" if delta.days == 0 else str(delta.days) + " days, "
         hours = "" if time[0] == "0" else time[0] + " hours, "
         minutes = "" if time[1] == "00" else time[1] + " minutes and "

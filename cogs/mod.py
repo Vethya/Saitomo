@@ -70,7 +70,6 @@ class Moderator(commands.Cog):
                 )
 
     @commands.command(description='__MODERATOR ONLY__\nUnban a banned user.', usage="unban <user>\nUser argument can be a mention or the user's name itself.")
-
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *, member: discord.Member):
         """Unban a banned user"""
