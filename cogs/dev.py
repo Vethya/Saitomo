@@ -59,14 +59,14 @@ class Developer(commands.Cog):
                             description='Please choose a speedtest mode:\n1. Text\n2. Image'
                         )
                 )
-        self.speedtest_data = (mode.id, ctx.author.id)
+        self.speedtest_data = (ctx.author.id, mode.id)
         await mode.add_reaction('1️⃣')
         await mode.add_reaction('2️⃣')
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         """Reaction handler for speedtest"""
-        if (reaction.message.id, user.id) != self.speedtest_data:
+        if (user.id, reaction.message.id) != self.speedtest_data:
             return
         await reaction.message.clear_reactions()
         await reaction.message.edit(
