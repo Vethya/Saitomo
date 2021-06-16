@@ -23,8 +23,8 @@ class Notes(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def addnote(self, ctx, key, *, text):
         """Add a note into this server"""
-        if not await db.get_note(key, ctx.guild.id):
-            await db.add_note(key, ctx.guild.id, text)
+        if not db.get_note(key, ctx.guild.id):
+            db.add_note(key, ctx.guild.id, text)
             await ctx.send(embed=
                         discord.Embed(
                                 title='**Note Added**',
@@ -32,7 +32,7 @@ class Notes(commands.Cog):
                                 colour=discord.Color.green()
                         )
                     )
-        elif ctx.guild.id not in config['config']['special_servers'] and len(await db.note_list(ctx.guild.id)) > config['config']['note_limit']:
+        elif ctx.guild.id not in config['config']['special_servers'] and len(db.note_list(ctx.guild.id)) > config['config']['note_limit']:
             await ctx.send(embed=
                         discord.Embed(
                                 title='**Note Limit Reached**',
@@ -50,7 +50,7 @@ class Notes(commands.Cog):
                             )
                     )
         else:
-            await db.update_note(key, ctx.guild.id, text)
+            db.update_note(key, ctx.guild.id, text)
             await ctx.send(embed=
                         discord.Embed(
                                 title='**Note Updated**',
@@ -63,8 +63,8 @@ class Notes(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def removenote(self, ctx, key):
         """Removr a note in this server"""
-        if await db.get_note(key, ctx.guild.id):
-            await db.rm_note(key, ctx.guild.id)
+        if db.get_note(key, ctx.guild.id):
+            db.rm_note(key, ctx.guild.id)
             await ctx.send(embed=
                         discord.Embed(
                                 title='**Note Removed**',
@@ -84,7 +84,7 @@ class Notes(commands.Cog):
     @commands.command(aliases=['clearall'], description='__MODERATOR ONLY__\nRemove all notes in this server.', usage='clearall')
     async def removeallnotes(self, ctx):
         """Remove all notes in this server"""
-        if not await db.note_list(ctx.guild.id):
+        if not db.note_list(ctx.guild.id):
             await ctx.send(embed=
                         discord.Embed(
                                 title="**No Notes**",
@@ -93,7 +93,7 @@ class Notes(commands.Cog):
                             )
                     )
             return
-        await db.rm_all(ctx.guild.id)
+        db.rm_all(ctx.guild.id)
         await ctx.send(embed=
                     discord.Embed(
                         title="**Notes Removed**",
@@ -105,7 +105,7 @@ class Notes(commands.Cog):
     @commands.command(aliases=['notes'], description='Get a list of notes in this server', usage='notes')
     async def notelist(self, ctx):
         """Get a list of notes in this server"""
-        notes = await db.note_list(ctx.guild.id)
+        notes = db.note_list(ctx.guild.id)
         if not notes:
             await ctx.send(embed=
                         discord.Embed(
@@ -133,7 +133,7 @@ class Notes(commands.Cog):
     @commands.command(aliases=['get'], description='Get a note in this server', usage='get <key>')
     async def getnote(self, ctx, key):
         """Get a note in this server"""
-        note = await db.get_note(key, ctx.guild.id)
+        note = db.get_note(key, ctx.guild.id)
         if not note:
             await ctx.send(embed=
                         discord.Embed(
