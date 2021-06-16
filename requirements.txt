@@ -1,0 +1,6 @@
+discord.py
+wikipedia
+urllib3
+aiohttp
+speedtest-cli
+pyyaml
