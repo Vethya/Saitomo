@@ -22,8 +22,9 @@ db = sqlite3.connect('bot.db')
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f"cogs.{filename[:-3]}")
-        logging.info(f"Cog {filename[:-3]} loaded!")
+    name, ext = os.path.splitext(filename)
+    if ext == '.py':
+        client.load_extension(f"cogs.{name}")
+        logging.info(f"Cog {name} loaded!")
 
 client.run(config['discord']['bot_token'])
