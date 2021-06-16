@@ -22,8 +22,7 @@ class Developer(commands.Cog):
     """Developer Cog"""
     def __init__(self, client):
         self.client = client
-        self.speedtest_userid = 0
-        self.speedtest_msgid = 0
+        self.speedtest_data = ()
 
     @commands.command(aliases=['exec'], description='__DEVELOPER ONLY__\nExecutes python code.', usage="exec|execute <code>")
     @commands.check(is_dev)
@@ -53,7 +52,6 @@ class Developer(commands.Cog):
     @commands.check(is_dev)
     async def speedtest(self, ctx):
         """Get the bot's connection speed"""
-        self.speedtest_userid = ctx.author.id
         mode = await ctx.send(
                     embed=discord.Embed(
                             title='**Speedtest**',
@@ -61,16 +59,14 @@ class Developer(commands.Cog):
                             description='Please choose a speedtest mode:\n1. Text\n2. Image'
                         )
                 )
-        self.speedtest_msgid = mode.id
+        self.speedtest_data = (mode.id, ctx.author.id)
         await mode.add_reaction('1️⃣')
         await mode.add_reaction('2️⃣')
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         """Reaction handler for speedtest"""
-        if reaction.message.id != self.speedtest_msgid:
-            return
-        if user.id != self.speedtest_userid:
+        if (reaction.message.id, user.id) != self.speedtest_data:
             return
         await reaction.message.clear_reactions()
         await reaction.message.edit(
