@@ -80,24 +80,33 @@ class Moderator(commands.Cog):
         if len(banned_users) == 0:
             await ctx.send("There's no banned user in the server")
             return
-        member_name, member_discriminator = member.split('#')
-        for bans in banned_users:
-            user = bans.user
-            if (user.name, user.discriminator) != (member_name, member_discriminator):
-                await ctx.send('User is not banned!')
-            else:
-                try:
-                    await ctx.guild.unban(user)
-                except commands.errors.MemberNotFound:
-                    await ctx.send('User not found!')
-                    return
-                await ctx.send(
+        if filter(lambda i: (i.user.name, i.user.discriminator) == (member_name, member_discriminator), banned_users):
+            await ctx.send(
                         embed=discord.Embed(
-                            title='Unbanned!',
-                            description=f'Admin **{ctx.author.name}** unbanned **{member_name}**',
-                            colour=discord.Color.green()
-                        )
+                                title='User is not banned!',
+                                description='The user you specified is not banned.',
+                                colour=discord.Color.red()
+                            )
                     )
+            return
+        try:
+            await ctx.guild.unban(user)
+        except commands.errors.MemberNotFound:
+            await ctx.send(
+                        embed=discord.Embed(
+                                title='User not found!',
+                                description='The user you specified is not in this server.',
+                                colour=discord.Color.red()
+                            )
+                    )
+            return
+        await ctx.send(
+            embed=discord.Embed(
+                    title='Unbanned!',
+                    description=f'Admin **{ctx.author.name}** unbanned **{member_name}**',
+                    colour=discord.Color.green()
+                )
+            )
 
     @commands.command(aliases=['p'], description="__MODERATOR ONLY__\nPurge messages.", usage="p|purge <amount>\nDefault amount is 5")
     @commands.has_permissions(manage_messages=True)
