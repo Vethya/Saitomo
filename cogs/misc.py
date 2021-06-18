@@ -26,11 +26,11 @@ class Misc(commands.Cog):
         url = f'https://api.urbandictionary.com/v0/define?term={urlencode(word)}'
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as raw_resp:
-                resp = await raw_resp.text()
                 rcode = raw_resp.status
-        if rcode != 200:
-            await ctx.send('Word not found!')
-            return
+                if rcode != 200:
+                    await ctx.send(f'Urban Dictionary responded with {rcode}!')
+                    return
+                resp = await raw_resp.text()
         definitions = json.loads(resp)['list']
         try:
             definition = definitions[int(defamount)]
