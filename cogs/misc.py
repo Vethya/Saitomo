@@ -32,6 +32,9 @@ class Misc(commands.Cog):
                     return
                 resp = await raw_resp.text()
         definitions = json.loads(resp)['list']
+        if not definitions:
+            await ctx.send(f'Word not found!')
+            return
         try:
             definition = definitions[int(defamount)]
         except IndexError:
