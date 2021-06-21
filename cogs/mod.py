@@ -24,10 +24,40 @@ class Moderator(commands.Cog):
             await ctx.send('This command can only be used in a server!')
             return
         if member == ctx.guild.owner:
-            await ctx.send("You can't kick the owner of the server!")
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't kick the owner of the server.",
+                        colour=discord.Color.red()
+                    )
+                )
             return
         if member == ctx.me:
-            await ctx.send("Don't make me kick myself it's tragic.")
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Don't make me kick myself it's tragic.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if ctx.author.top_role == member.top_role:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't kick someone that has the same permissions as you.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if ctx.author.top_role < member.top_role:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't kick someone that has more permissions than you.",
+                        colour=discord.Color.red()
+                    )
+                )
             return
         try:
             await member.kick(reason=reason)
@@ -49,12 +79,42 @@ class Moderator(commands.Cog):
         """Ban a user from the server"""
         if not ctx.guild:
             await ctx.send('This command can only be used in a server!')
-            return 
+            return
         if member == ctx.guild.owner:
-            await ctx.send("You can't ban the owner of the server!")
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't ban the owner of the server.",
+                        colour=discord.Color.red()
+                    )
+                )
             return
         if member == ctx.me:
-            await ctx.send("Don't make me ban myself it's tragic.")
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Don't make me ban myself it's tragic.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if ctx.author.top_role == member.top_role:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't ban someone that has the same permissions as you.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if ctx.author.top_role < member.top_role:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"You can't ban someone that has more permissions than you.",
+                        colour=discord.Color.red()
+                    )
+                )
             return
         try:
             await member.ban(reason=reason)
