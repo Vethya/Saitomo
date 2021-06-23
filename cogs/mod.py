@@ -10,6 +10,7 @@ Commands:
 
 from discord.ext import commands
 import discord
+from bot import config
 
 class Moderator(commands.Cog):
     """Moderator Cog"""
@@ -32,6 +33,25 @@ class Moderator(commands.Cog):
                     )
                 )
             return
+        if member.id in config['config']['dev_id']:
+            if ctx.author.id in config['config']['dev_id']:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Come on dude! Don't do that to your comrade.",
+                        colour=discord.Color.red()
+                    )
+                )
+                return
+            else:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"I'm definitely not gonna kick my developers.",
+                        colour=discord.Color.red()
+                    )
+                )
+                return
         if member == ctx.me:
             await ctx.send(
                     embed=discord.Embed(
@@ -89,6 +109,25 @@ class Moderator(commands.Cog):
                     )
                 )
             return
+        if member.id in config['config']['dev_id']:
+            if ctx.author.id in config['config']['dev_id']:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Come on dude! Don't do that to your comrade.",
+                        colour=discord.Color.red()
+                    )
+                )
+                return
+            else:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"I'm definitely not gonna ban my developers.",
+                        colour=discord.Color.red()
+                    )
+                )
+                return
         if member == ctx.me:
             await ctx.send(
                     embed=discord.Embed(
