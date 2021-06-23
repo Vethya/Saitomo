@@ -24,6 +24,15 @@ class Moderator(commands.Cog):
         if not ctx.guild:
             await ctx.send('This command can only be used in a server!')
             return
+        if member == ctx.author:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Please don't kick yourself! Take a break and think about it.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
         if member == ctx.guild.owner:
             await ctx.send(
                     embed=discord.Embed(
@@ -99,6 +108,15 @@ class Moderator(commands.Cog):
         """Ban a user from the server"""
         if not ctx.guild:
             await ctx.send('This command can only be used in a server!')
+            return
+        if member == ctx.author:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='No!',
+                        description=f"Please don't ban yourself! Take a break and think about it.",
+                        colour=discord.Color.red()
+                    )
+                )
             return
         if member == ctx.guild.owner:
             await ctx.send(
