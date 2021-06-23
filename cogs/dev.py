@@ -14,10 +14,6 @@ from discord.ext import commands
 from bot import config, db
 import speedtest
 
-def is_dev(ctx):
-    """Check if user is a developer"""
-    return ctx.author.id in config['config']['dev_id']
-
 class Developer(commands.Cog):
     """Developer Cog"""
     def __init__(self, client):
@@ -25,9 +21,17 @@ class Developer(commands.Cog):
         self.speedtest_data = ()
 
     @commands.command(aliases=['exec'], description='__DEVELOPER ONLY__\nExecutes python code.', usage="exec|execute <code>")
-    @commands.check(is_dev)
     async def execute(self, ctx, *, code):
         """Executes python code"""
+        if ctx.author.id not in config['config']['dev_id']:
+            await ctx.send(embed=
+                    discord.Embed(
+                            title='No!',
+                            description=f"Only my developers can use this command.",
+                            colour=discord.Color.red(),
+                        )
+                )
+            return
         exec(
             'async def __ex(self, ctx):' +
             ''.join([f'\n {l}' for l in code.split('\n')])
@@ -42,16 +46,32 @@ class Developer(commands.Cog):
                 )
 
     @commands.command(description='__DEVELOPER ONLY__\nSend messages as the bot.', usage="echo <text>")
-    @commands.check(is_dev)
     async def echo(self, ctx, *, msg):
         """Send messages as the bot"""
+        if ctx.author.id not in config['config']['dev_id']:
+            await ctx.send(embed=
+                    discord.Embed(
+                            title='No!',
+                            description=f"Only my developers can use this command.",
+                            colour=discord.Color.red(),
+                        )
+                )
+            return
         await ctx.message.delete()
         await ctx.send(msg)
 
     @commands.command(aliases=['st', 'speed'], description="__DEVELOPER ONLY__\nGet the bot's connection speed.", usage="st|speed|speedtest")
-    @commands.check(is_dev)
     async def speedtest(self, ctx):
         """Get the bot's connection speed"""
+        if ctx.author.id not in config['config']['dev_id']:
+            await ctx.send(embed=
+                    discord.Embed(
+                            title='No!',
+                            description=f"Only my developers can use this command.",
+                            colour=discord.Color.red(),
+                        )
+                )
+            return
         mode = await ctx.send(
                     embed=discord.Embed(
                             title='**Speedtest**',
@@ -100,26 +120,42 @@ class Developer(commands.Cog):
                     )
     
     @commands.command(aliases=['gnotes'], description="__DEVELOPER ONLY__\nGet all the notes from the bot's database.", usage='gnotes')
-    @commands.check(is_dev)
     async def globalnotes(self, ctx):
         """Get all the notes in the bot's database"""
+        if ctx.author.id not in config['config']['dev_id']:
+            await ctx.send(embed=
+                    discord.Embed(
+                            title='No!',
+                            description=f"Only my developers can use this command.",
+                            colour=discord.Color.red(),
+                        )
+                )
+            return
         gnotes = db.execute("SELECT * FROM notes").fetchall()
         chats = []
         for gnote in gnotes:
             if gnote[1] not in chats:
                 chats.append(gnote[1])
         await ctx.send(embed=
-                        discord.Embed(
-                                title='**Global Notes**',
-                                description=f"There is/are a total of **{len(gnotes)}** note(s) across **{len(chats)}** chats",
-                                colour=discord.Color.green(),
-                            )
-                    ) 
+                    discord.Embed(
+                            title='**Global Notes**',
+                            description=f"There is/are a total of **{len(gnotes)}** note(s) across **{len(chats)}** chats",
+                            colour=discord.Color.green(),
+                        )
+                ) 
 
     @commands.command(aliases=['poweroff'], description="__DEVELOPER ONLY__\nShut the bot down.", usage="shutdown|poweroff")
-    @commands.check(is_dev)
     async def shutdown(self, ctx):
         """Shut the bot down"""
+        if ctx.author.id not in config['config']['dev_id']:
+            await ctx.send(embed=
+                    discord.Embed(
+                            title='No!',
+                            description=f"Only my developers can use this command.",
+                            colour=discord.Color.red(),
+                        )
+                )
+            return
         await ctx.send('Shutting down...')
         await self.client.close()
 
