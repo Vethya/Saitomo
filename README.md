@@ -2,13 +2,13 @@
 A management bot with awesome extra commands for Discord.
 ## Installation
 1. Clone this repository (git must be installed if you're using windows)
-- `git clone https://github.com/Vethya/HelperBot`
+- `git clone https://github.com/Vethya/Saitomo`
 2. Change directory
-- `cd HelperBot`
+- `cd Saitomo`
 3. Install requirements
 - `pip3 install -r requirements.txt`
 ## Run the bot
-- `python3 -m helper`
+- `python3 bot.py`
 ## Credits
 - [Blankie](https://github.com/the-blank-x) for the execute command.
 - Raitomo (RaiTomo#6844) for bot name and huge grammer fix.
