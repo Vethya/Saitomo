@@ -11,7 +11,7 @@ Commands:
 from discord.ext import commands
 import discord
 from bot import config
-from .utils.permissions import check_perm
+from utils.permissions import check_perm
 
 class Moderator(commands.Cog):
     """Moderator Cog"""

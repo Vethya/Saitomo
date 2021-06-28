@@ -1,5 +1,5 @@
 """
-Misc Cog
+Utility Cog
 
 Commands:
 - urban dictionary
@@ -15,7 +15,7 @@ import aiohttp
 import wikipedia
 from bot import prefix
 
-class Misc(commands.Cog):
+class Utility(commands.Cog):
     """Misc Cog"""
     def __init__(self, client):
         self.client = client
@@ -146,4 +146,4 @@ class Misc(commands.Cog):
 
 def setup(client):
     """Cog set up"""
-    client.add_cog(Misc(client))
+    client.add_cog(Utility(client))
