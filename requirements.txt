@@ -4,3 +4,4 @@ urllib3
 aiohttp
 speedtest-cli
 pyyaml
+gpytranslate

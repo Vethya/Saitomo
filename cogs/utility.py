@@ -13,6 +13,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import wikipedia
+from gpytranslate import Translator
 from bot import prefix
 
 class Utility(commands.Cog):
@@ -143,6 +144,19 @@ class Utility(commands.Cog):
                                 colour=discord.Colour.red()
                             )
                     )
+    @commands.command(aliases=['tr', 'tl'], description='Translate the text to the specified language.', usage='tr|tl|translate <lang> <text>')
+    async def translate(self, ctx, lang, *, to_translate):
+        """Translate the text to the specified language"""
+        translator = Translator()
+        trans = await translator.translate(text=to_translate, targetlang=lang)
+        detected_lang = await translator.detect(text=to_translate) 
+        await ctx.send(
+                    embed=discord.Embed(
+                            title=f'Translation ({detected_lang}-{lang})',
+                            description=trans.text,
+                            colour=discord.Color.blue()
+                        )
+                )
 
 def setup(client):
     """Cog set up"""
