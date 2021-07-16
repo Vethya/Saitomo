@@ -11,7 +11,7 @@ Commands:
 
 import discord
 from discord.ext import commands
-from bot import config, db
+from bot import config
 import speedtest
 
 class Developer(commands.Cog):
