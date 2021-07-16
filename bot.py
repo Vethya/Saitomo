@@ -17,8 +17,6 @@ client.remove_command('help')
 prefix = config['discord']['prefix'][0]
 runtime = datetime.now()
 
-db = sqlite3.connect('bot.db')
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 for filename in os.listdir('./cogs'):

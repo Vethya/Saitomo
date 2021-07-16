@@ -118,32 +118,7 @@ class Developer(commands.Cog):
                                 image=result
                             )
                     )
-    
-    @commands.command(aliases=['gnotes'], description="__DEVELOPER ONLY__\nGet all the notes from the bot's database.", usage='gnotes')
-    async def globalnotes(self, ctx):
-        """Get all the notes in the bot's database"""
-        if ctx.author.id not in config['config']['dev_id']:
-            await ctx.send(embed=
-                    discord.Embed(
-                            title='No!',
-                            description=f"Only my developers can use this command.",
-                            colour=discord.Color.red(),
-                        )
-                )
-            return
-        gnotes = db.execute("SELECT * FROM notes").fetchall()
-        chats = []
-        for gnote in gnotes:
-            if gnote[1] not in chats:
-                chats.append(gnote[1])
-        await ctx.send(embed=
-                    discord.Embed(
-                            title='**Global Notes**',
-                            description=f"There is/are a total of **{len(gnotes)}** note(s) across **{len(chats)}** chats",
-                            colour=discord.Color.green(),
-                        )
-                ) 
-
+ 
     @commands.command(aliases=['poweroff'], description="__DEVELOPER ONLY__\nShut the bot down.", usage="shutdown|poweroff")
     async def shutdown(self, ctx):
         """Shut the bot down"""
