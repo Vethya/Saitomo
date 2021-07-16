@@ -65,23 +65,15 @@ class Moderator(commands.Cog):
 
     @commands.command(description='__MODERATOR ONLY__\nUnban a banned user.', usage="unban <user>\nUser argument can be a mention or the user's name itself.")
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, *, member: discord.Member):
+    async def unban(self, ctx, *, user):
         """Unban a banned user"""
         if not ctx.guild:
             await ctx.send('This command can only be used in a server!')
             return
+        user = self.client.get_user(int(user))
         banned_users = await ctx.guild.bans()
         if len(banned_users) == 0:
             await ctx.send("There's no banned user in the server")
-            return
-        if filter(lambda i: (i.user.name, i.user.discriminator) == (member_name, member_discriminator), banned_users):
-            await ctx.send(
-                        embed=discord.Embed(
-                                title='User is not banned!',
-                                description='The user you specified is not banned.',
-                                colour=discord.Color.red()
-                            )
-                    )
             return
         try:
             await ctx.guild.unban(user)
@@ -89,15 +81,25 @@ class Moderator(commands.Cog):
             await ctx.send(
                         embed=discord.Embed(
                                 title='User not found!',
-                                description='The user you specified is not in this server.',
+                                description='The user you specified can not be found.',
                                 colour=discord.Color.red()
                             )
                     )
             return
+        except Exception as e:
+            if 'Unknown Ban' in str(e):
+                await ctx.send(
+                        embed=discord.Embed(
+                                title='User is not banned!',
+                                description='The user you specified is not banned.',
+                                colour=discord.Color.red()
+                            )
+                    )
+                return
         await ctx.send(
             embed=discord.Embed(
                     title='Unbanned!',
-                    description=f'Admin **{ctx.author.name}** unbanned **{member_name}**',
+                    description=f'Admin **{ctx.author.name}** unbanned **{user.name}**',
                     colour=discord.Color.green()
                 )
             )
