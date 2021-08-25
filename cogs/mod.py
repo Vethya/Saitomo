@@ -37,8 +37,7 @@ class Moderator(commands.Cog):
                         title='Kicked!',
                         description=f'Admin **{ctx.author.name}** kicked **{member.name}** from the server\nReason: {reason}',
                         colour=discord.Color.red()
-                    ),
-                    delete_after=0
+                    )
                 )
 
     @commands.command(description='__MODERATOR ONLY__\nBan a user from the server.', usage="ban <user>\nUser argument can be a mention or the user's name itself.")
