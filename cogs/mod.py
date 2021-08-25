@@ -104,6 +104,88 @@ class Moderator(commands.Cog):
                 )
             )
 
+    @commands.command(description='__MODERATOR ONLY__\nMute a user.', usage="mute <user>\nUser argument can be a mention or the user's name itself.")
+    @commands.has_permissions(ban_members=True)
+    async def mute(self, ctx, member: discord.Member, *, reason=None):
+        """Mute a user"""
+        if not ctx.guild:
+            await ctx.send('This command can only be used in a server!')
+            return
+        if await check_perm(ctx, member):
+            return
+        muted = discord.utils.get(ctx.guild.roles, name='Muted')
+        if not muted:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Muted role not found!',
+                        description='Muted role is not found! Make sure to create a Muted role (case sensitive) with appropriate permissions for this command to work.',
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if discord.utils.get(member.roles, name='Muted'):
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Already Muted!',
+                        description='User is already muted.',
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        try:
+            await member.add_roles(muted, reason=reason)
+        except commands.errors.MemberNotFound:
+            await ctx.send('User not found!')
+            return
+        await ctx.send(
+                    embed=discord.Embed(
+                        title='Muted!',
+                        description=f'Admin **{ctx.author.name}** muted **{member.name}**\nReason: {reason}',
+                        colour=discord.Color.red()
+                    )
+                )
+
+    @commands.command(description='__MODERATOR ONLY__\nUnmute a user.', usage="unmute <user>\nUser argument can be a mention or the user's name itself.")
+    @commands.has_permissions(ban_members=True)
+    async def unmute(self, ctx, member: discord.Member, *, reason=None):
+        """Unmute a user"""
+        if not ctx.guild:
+            await ctx.send('This command can only be used in a server!')
+            return
+        if await check_perm(ctx, member):
+            return
+        muted = discord.utils.get(ctx.guild.roles, name='Muted')
+        if not muted:
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Muted role not found!',
+                        description='Muted role is not found! Make sure to create a Muted role (case sensitive) with appropriate permissions for this command to work.',
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        if not discord.utils.get(member.roles, name='Muted'):
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Not Muted!',
+                        description='User is not muted.',
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        try:
+            await member.remove_roles(muted, reason=reason)
+        except commands.errors.MemberNotFound:
+            await ctx.send('User not found!')
+            return
+        await ctx.send(
+                    embed=discord.Embed(
+                        title='Unmuted!',
+                        description=f'Admin **{ctx.author.name}** unmuted **{member.name}**\nReason: {reason}',
+                        colour=discord.Color.red()
+                    )
+                )
+
     @commands.command(aliases=['p'], description="__MODERATOR ONLY__\nPurge messages.", usage="p|purge <amount>\nDefault amount is 5")
     @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, amount=5):
