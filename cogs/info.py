@@ -4,6 +4,8 @@ Information Cog
 Commands:
 - ping
 - alive
+- server
+- user
 """
 
 from os import name
@@ -84,7 +86,7 @@ class Information(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(description="Get information on the current or given user.", usage="user <user>")
+    @commands.command(description="Get information on the current or given user.", usage="user <user>\nUser argument can be a mention or the user's name itself.")
     async def user(self, ctx, user: discord.Member=None):
         """Get information on the current or given user"""
         if not ctx.guild:
