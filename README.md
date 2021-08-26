@@ -8,7 +8,7 @@ A management bot with awesome extra commands for Discord.
 3. Install requirements
 - `pip3 install -r requirements.txt`
 ## Run the bot
-- `python3 bot.py`
+- `python bot.py`
 ## Credits
 - [Blankie](https://github.com/the-blank-x) for the execute command.
 - Raitomo (RaiTomo#6844) for bot name and huge grammer fix.
