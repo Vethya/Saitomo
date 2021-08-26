@@ -4,7 +4,6 @@ Information Cog
 Commands:
 - ping
 - alive
-- is special
 """
 
 import time
@@ -57,24 +56,7 @@ class Information(commands.Cog):
                                     f"Uptime: **{days}{hours}{minutes}{time[2]} seconds**"
                     )
             )
-    @commands.command(description="Check if a server is one of the special servers.", usage="isspecial")
-    async def isspecial(self, ctx):
-        """Check if a server is one of the special servers"""
-        if ctx.guild.id in config['config']['special_servers']:
-            await ctx.send(embed=discord.Embed(
-                                title='**Yes!**',
-                                description="Your server is in my special servers list!",
-                                colour=discord.Color.green()
-                            )
-                        )
-        else:
-            await ctx.send(embed=discord.Embed(
-                                title='**No!**',
-                                description="Your server isn't in my special servers list!",
-                                colour=discord.Color.red()
-                            )
-                        )
+
 def setup(client):
     """Cog set up"""
     client.add_cog(Information(client))
-
