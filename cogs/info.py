@@ -6,10 +6,15 @@ Commands:
 - alive
 """
 
+from os import name
 import time
 from datetime import datetime, timedelta
 import discord
+from discord import colour
+from discord.embeds import Embed, EmptyEmbed
 from discord.ext import commands
+from discord.utils import valid_icon_size
+from utils.parser import parse_date
 from bot import config, runtime
 
 class Information(commands.Cog):
@@ -56,6 +61,56 @@ class Information(commands.Cog):
                                     f"Uptime: **{days}{hours}{minutes}{time[2]} seconds**"
                     )
             )
+
+    @commands.command(description="Get information on the current server.", usage="server")
+    async def server(self, ctx):
+        """Get information on the current server"""
+        if not ctx.guild:
+            await ctx.send('This command can only be used in a server!')
+            return
+        embed = discord.Embed(title="Server Information", colour=discord.Color.green())
+
+        if ctx.guild.icon_url:
+            embed.set_thumbnail(url=ctx.guild.icon_url)
+        created_at = ctx.guild.created_at
+
+        embed.add_field(name="Name", value=ctx.guild.name, inline=True)
+        embed.add_field(name="ID", value=ctx.guild.id, inline=True)
+        embed.add_field(name="Member Count", value=ctx.guild.member_count, inline=True)
+        embed.add_field(name="Owner", value=ctx.guild.owner)
+        embed.add_field(name="Region", value=str(ctx.guild.region).title(), inline=True)
+        embed.add_field(name="Max Members", value=ctx.guild.max_members, inline=True)
+        embed.add_field(name="Created At", value=parse_date(created_at), inline=True)
+
+        await ctx.send(embed=embed)
+
+    @commands.command(description="Get information on the current or given user.", usage="user <user>")
+    async def user(self, ctx, user: discord.Member=None):
+        """Get information on the current or given user"""
+        if not ctx.guild:
+            await ctx.send('This command can only be used in a server!')
+            return
+        
+        user = user if user else ctx.author
+        embed = discord.Embed(title="User Information", colour=discord.Color.green())
+
+        embed.set_thumbnail(url=user.avatar_url)
+        roles = []
+        if len(user.roles) > 1:
+            for role in user.roles:
+                if role.id != ctx.guild.default_role.id:
+                    roles.append(f"<@&{role.id}>")
+            roles = ", ".join(roles)
+        else:
+            roles = None
+
+        embed.add_field(name="Name", value=user, inline=True)
+        embed.add_field(name="ID", value=user.id, inline=True)
+        embed.add_field(name="Created At", value=parse_date(user.created_at), inline=True)
+        embed.add_field(name="Roles", value=roles, inline=True)
+
+        await ctx.send(embed=embed)
+
 
 def setup(client):
     """Cog set up"""
