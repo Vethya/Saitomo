@@ -7,6 +7,7 @@ A management bot with awesome extra commands for Discord.
 - `cd Saitomo`
 3. Install requirements
 - `pip3 install -r requirements.txt`
+- Install FFmpeg [here](https://ffmpeg.org/).
 ## Run the bot
 - `python bot.py`
 ## Credits

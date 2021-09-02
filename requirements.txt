@@ -5,3 +5,5 @@ aiohttp
 speedtest-cli
 pyyaml
 gpytranslate
+PyNaClSS
+youtube_dl
