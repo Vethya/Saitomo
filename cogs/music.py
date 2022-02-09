@@ -29,22 +29,12 @@ class Music(commands.Cog):
             await ctx.send('This command can only be used in a server!')
             return
 
-        filename = f"{ctx.guild.id}.mp3"
-        dir = f"./musics/{filename}"
         voice = ctx.author.voice
+        voice_client = ctx.voice_client
 
-        if os.path.isfile(dir):
-            try:
-                os.remove(dir)
-            except:
-                await ctx.send(
-                    embed=discord.Embed(
-                        title='Playing Music',
-                        description="Please stop the playing music first before playing another music.",
-                        colour=discord.Color.red()
-                    )
-                )
-            return
+        if not voice_client:
+            voice_client = await voice.channel.connect()
+
         if not voice:
             await ctx.send(
                     embed=discord.Embed(
@@ -54,9 +44,6 @@ class Music(commands.Cog):
                     )
                 )
             return
-        voice_client = ctx.voice_client
-        if not voice_client:
-            voice_client = await voice.channel.connect()
 
         ytdl_opts = {
             'format': 'bestaudio/best',
@@ -66,29 +53,15 @@ class Music(commands.Cog):
                 'preferredquality': '192',
             }],
         }
+
         with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
-            try:
-                ytdl.download([url])
-                info = ytdl.extract_info(url)
-            except DownloadError:
-                await ctx.send(
-                    embed=discord.Embed(
-                        title='Url Not Supported',
-                        description="The url you specified is not supported.",
-                        colour=discord.Color.red()
-                    )
-                )
-                return
-        for file in os.listdir("./"):
-            if file.endswith(".mp3"):
-                os.rename(file, filename)
-                os.replace(f"./{filename}", dir)
+            music = ytdl.extract_info(url, download=False)
                 
-        voice_client.play(discord.FFmpegPCMAudio(dir))
+        voice_client.play(discord.FFmpegPCMAudio(music["formats"][0]["url"], ))
         embed = discord.Embed(title="Playing", colour=discord.Color.green())
-        embed.set_thumbnail(url=info['thumbnail'])
-        embed.add_field(name="Title", value=info['title'], inline=True)
-        embed.add_field(name="Duration", value=parse_seconds(info['duration']), inline=True)
+        embed.set_thumbnail(url=music['thumbnail'])
+        embed.add_field(name="Title", value=music['title'], inline=True)
+        embed.add_field(name="Duration", value=parse_seconds(music['duration']), inline=True)
         await ctx.send(embed=embed)
     
     @commands.command(aliases=['leave'], description="Get the bot out of the voice channel you're in.", usage="leave")
@@ -183,7 +156,6 @@ class Music(commands.Cog):
                         colour=discord.Color.green()
                     )
                 )
-            os.remove(f"./musics/{ctx.guild.id}.mp3")
         else:
             await ctx.send(
                     embed=discord.Embed(
