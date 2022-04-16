@@ -9,7 +9,6 @@ Commands:
 - stop
 """
 
-import os
 from utils.parser import parse_seconds
 from utils.matcher import music_url_type
 from utils.youtube import search, get_video_info
