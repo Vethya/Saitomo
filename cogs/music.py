@@ -10,13 +10,13 @@ Commands:
 """
 
 import os
-
-from youtube_dl.utils import DownloadError
 from utils.parser import parse_seconds
+from utils.matcher import music_url_type
+from utils.youtube import search, get_video_info
+from utils.spotify import get_track_info
 
 from discord.ext import commands
 import discord
-import youtube_dl
 
 class Music(commands.Cog):
     """Music Cog"""
@@ -32,9 +32,6 @@ class Music(commands.Cog):
         voice = ctx.author.voice
         voice_client = ctx.voice_client
 
-        if not voice_client:
-            voice_client = await voice.channel.connect()
-
         if not voice:
             await ctx.send(
                     embed=discord.Embed(
@@ -45,21 +42,41 @@ class Music(commands.Cog):
                 )
             return
 
-        ytdl_opts = {
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
-        }
+        url_type = music_url_type(url)
+        if url_type == "youtube":
+            music = get_video_info(url)
 
-        with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
-            music = ytdl.extract_info(url, download=False)
-                
-        voice_client.play(discord.FFmpegPCMAudio(music["formats"][0]["url"], ))
+        elif url_type == "spotify":
+            track = get_track_info(url)
+            youtube_url = search(f"{track['artist']} - {track['name']}")
+
+            music = get_video_info(youtube_url)
+
+        elif url_type == "invalid":
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Unsupported Url',
+                        description="This url is either invalid or currently unsupported.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+
+        if not voice_client:
+            voice_client = await voice.channel.connect()
+
+        if voice_client.is_playing():
+            await ctx.send(
+                    embed=discord.Embed(
+                        title='Playing Music',
+                        description="Please stop the playing music first before playing another music.",
+                        colour=discord.Color.red()
+                    )
+                )
+            return
+        
+        voice_client.play(discord.FFmpegPCMAudio(music["formats"][0]["url"], before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"))
         embed = discord.Embed(title="Playing", colour=discord.Color.green())
-        embed.set_thumbnail(url=music['thumbnail'])
         embed.add_field(name="Title", value=music['title'], inline=True)
         embed.add_field(name="Duration", value=parse_seconds(music['duration']), inline=True)
         await ctx.send(embed=embed)
