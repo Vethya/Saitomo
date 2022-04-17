@@ -8,6 +8,9 @@ A management bot with awesome extra commands for Discord.
 3. Install requirements
 - `pip3 install -r requirements.txt`
 - Install FFmpeg [here](https://ffmpeg.org/).
+4. Configurate
+- Duplicate `example-config.yaml`, and rename it to `config.yaml`. Then replace it to your information.
+- On windows, add `SPOTIPY_CLIENT_ID` and `SPOTIPY_CLIENT_SECRET` manually by going to Control Panel > System and Security > System > Advanced system settings > Environment Variables. On linux, simply run `export SPOTIPY_CLIENT_ID='your-spotify-client-id' && export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'`
 ## Run the bot
 - `python bot.py`
 ## Credits
