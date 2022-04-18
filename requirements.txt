@@ -7,3 +7,4 @@ pyyaml
 gpytranslate
 youtube_dl
 youtube-search
+spotipy
