@@ -22,7 +22,7 @@ class Music(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(description="Play music in the voice channel you're in.", usage="play <url>\nUrl is a Youtube video url.")
+    @commands.command(description="Play music in the voice channel you're in.", usage="play <url>\nUrl is a Youtube or Spotify url.")
     async def play(self, ctx, url):
         if not ctx.guild:
             await ctx.send('This command can only be used in a server!')
